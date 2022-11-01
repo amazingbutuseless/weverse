@@ -12,6 +12,20 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/:artist/artist/:file(.+\\.png)',
+        destination: '/api/thumbnail',
+      },
+      {
+        source: '/:artist/artist/:id',
+        has: [{ type: 'header', key: 'accept', value: 'image/png' }],
+        destination: '/api/thumbnail',
+      },
+      { source: '/:artist/artist/:id', destination: '/' },
+    ];
+  },
 };
 
 module.exports = withNx(nextConfig);
