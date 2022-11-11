@@ -13,7 +13,9 @@ export default async function ThumbnailApi(
     req.headers.accept === 'image/png'
   );
 
-  await artistPostHelper.open(req.url.replace('.png', ''));
+  const postPath = ((req.query.url || req.url) as string).replace('.png', '');
+
+  await artistPostHelper.open(postPath);
 
   const data = await artistPostHelper.screenshot();
 
