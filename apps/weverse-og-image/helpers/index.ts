@@ -1,2 +1,2 @@
 export * from './weverse-artist-post-helper';
-export * from './playwright-settings';
+export * from './browser-settings';

@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { PlaywrightSettings, WeverseArtistPostHelper } from '../../../helpers';
+import { BrowserSettings, WeverseArtistPostHelper } from '../../../helpers';
 
 export default async function ThumbnailApi(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { page, terminate } = await PlaywrightSettings();
+  const { page, terminate } = await BrowserSettings();
 
   const artistPostHelper = new WeverseArtistPostHelper(
     page,

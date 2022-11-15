@@ -1,9 +1,9 @@
 import chromium from 'chrome-aws-lambda';
-import playwright from 'playwright-core';
+import puppeteer from 'puppeteer-core';
 
-export const PlaywrightSettings = (() => {
-  let browser: playwright.Browser;
-  let page: playwright.Page;
+export const BrowserSettings = (() => {
+  let browser: puppeteer.Browser;
+  let page: puppeteer.Page;
 
   async function init() {
     const options = {
@@ -13,11 +13,10 @@ export const PlaywrightSettings = (() => {
         '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
       headless: chromium.headless,
     };
-    browser = await playwright.chromium.launch(options);
+    browser = await puppeteer.launch(options);
 
-    page = await browser.newPage({
-      viewport: { width: 768, height: 403 },
-    });
+    page = await browser.newPage();
+    await page.setViewport({ width: 768, height: 403 });
   }
 
   function terminate() {

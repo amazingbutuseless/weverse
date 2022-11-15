@@ -1,14 +1,15 @@
-import playwright from 'playwright-core';
+import puppeteer from 'puppeteer-core';
 
 export class WeverseAccountHelper {
-  static async login(page: playwright.Page) {
-    await page.locator('input[name="email"]').fill(process.env.WEVERSE_EMAIL);
-    await page.locator('button[type="submit"]').click();
+  static async login(page: puppeteer.Page) {
+    const emailField = await page.$('input[name="email"]');
+    await emailField.type(process.env.WEVERSE_EMAIL);
+    await emailField.press('Enter');
 
-    await page.waitForNavigation({ waitUntil: 'networkidle' });
+    await page.waitForSelector('input[name="password"]');
 
-    const passwordField = await page.locator('input[name="password"]');
-    await passwordField.fill(process.env.WEVERSE_PASSWORD);
-    await page.locator('button[type="submit"]').click();
+    await page.click('input[name="password"]');
+    await page.keyboard.type(process.env.WEVERSE_PASSWORD);
+    await page.keyboard.press('Enter');
   }
 }

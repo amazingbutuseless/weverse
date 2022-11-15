@@ -1,4 +1,5 @@
-import playwright from 'playwright-core';
+import puppeteer from 'puppeteer-core';
+
 import { WeverseAccountHelper } from './weverse-account-helper';
 
 export class WeverseHelper {
@@ -8,16 +9,25 @@ export class WeverseHelper {
     return new URL(path, WeverseHelper.WEVERSE_DOMAIN).toString();
   }
 
-  constructor(private page: playwright.Page) {}
+  constructor(private page: puppeteer.Page) {}
 
   async login() {
     const page = this.page;
 
-    await page.waitForSelector('text="로그인하시겠습니까?"');
-    const loginButton = await page.locator('button:has-text("로그인")');
-    await loginButton.click();
+    const loginConfirm = await page.waitForSelector('div#modal');
 
-    await page.waitForNavigation({ waitUntil: 'networkidle' });
+    await loginConfirm.$$eval(
+      'button[class^="ModalButtonView_button"]',
+      (buttons) => {
+        buttons.forEach((button: HTMLButtonElement) => {
+          if (button.textContent === '로그인') {
+            button.click();
+          }
+        });
+      }
+    );
+
+    await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
     await WeverseAccountHelper.login(page);
   }
